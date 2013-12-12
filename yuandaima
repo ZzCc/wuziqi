@@ -1,0 +1,119 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+
+public class Wuziqi1 extends JFrame {
+private static final int WINDOW_WIDTH = 520;
+private static final int WINDOW_HEIGHT = 520;
+private ChessBorad borad=new ChessBorad();
+private int[][] chess=new int[15][15];//初始化棋盘状态值
+private boolean isBlack=true;//判断是否该黑棋落子
+public String msg="黑棋下";
+
+
+public Wuziqi1(){
+init();//调用初始化窗体
+//initMenu();
+//initButton();
+//initProgress();
+}
+
+
+private void init() {
+// TODO Auto-generated method stub
+this.setTitle("五子棋");
+Toolkit tool=Toolkit.getDefaultToolkit();
+Image img_title=tool.getImage("a.png");
+this.setIconImage(img_title);
+this.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
+Dimension size=tool.getScreenSize();
+this.setLocation((size.width-WINDOW_WIDTH)/2, (size.height-WINDOW_HEIGHT)/2);
+this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+//添加棋盘部分
+this.add(borad);
+borad.setPreferredSize(new Dimension(WINDOW_WIDTH,WINDOW_HEIGHT));
+this.pack();
+this.setResizable(false);
+this.setVisible(true);
+//监听棋盘事件
+borad.addMouseListener(new MouseAdapter(){
+
+
+
+public void mousePressed(MouseEvent arg0) {
+// TODO Auto-generated method stub
+int x=arg0.getX();
+int y=arg0.getY();
+//如何将屏幕坐标转换成二维数组中的索引坐标
+int positionX=(x-50+10)/30;
+int positionY=(y-50+10)/30;
+System.out.println(positionX+","+positionY);
+if(positionX>=0&&positionX<15&&positionY>=0&&positionY<15){
+if(chess[positionX][positionY]!=0){
+JOptionPane.showMessageDialog(null, "此处已有棋子");
+return;
+}
+if(isBlack){
+chess[positionX][positionY]=1;//下黑棋
+msg="白棋下";
+}else{
+chess[positionX][positionY]=2;//下白旗
+msg="黑棋下";
+}
+isBlack=!isBlack;//消息树发送消息 
+}else {
+}
+}
+
+
+
+public void mouseReleased(MouseEvent arg0) {
+// TODO Auto-generated method stub
+borad.repaint();
+}
+});
+}
+//定义一个内部类
+class ChessBorad extends JPanel{
+
+protected void paintComponent(Graphics arg0) {
+// TODO Auto-generated method stub
+super.paintComponent(arg0);
+for(int row=50,column=50;row<=470||column<=470;row+=30,column+=30){
+arg0.drawLine(50, row, 470, row);//画横线
+arg0.drawLine(column, 50, column, 470);//画纵线
+}
+//每次重绘时根据二维数组中的状态值来绘制黑棋,白旗,空
+for(int row=0;row<15;row++){
+for(int column=0;column<chess[row].length;column++){
+if(chess[row][column]==1){
+arg0.setColor(Color.BLACK);
+arg0.fillOval(50+row*30-10, 50+column*30-10, 20, 20);
+}else if(chess[row][column]==2){
+arg0.setColor(Color.WHITE);
+arg0.fillOval(50+row*30-10, 50+column*30-10, 20, 20);
+}
+}
+}
+arg0.setColor(Color.PINK);
+arg0.setFont(new Font("黑体",Font.BOLD,25));
+arg0.drawString(msg, 210, 500);
+}
+}
+public static void main(String[] args) {
+new Wuziqi1();
+}
+}
