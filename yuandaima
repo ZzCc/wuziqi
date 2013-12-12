@@ -86,7 +86,7 @@ borad.repaint();
 }
 });
 }
-//定义一个内部类
+// 定义一个内部类
 class ChessBorad extends JPanel{
 
 protected void paintComponent(Graphics arg0) {
@@ -96,7 +96,7 @@ for(int row=50,column=50;row<=470||column<=470;row+=30,column+=30){
 arg0.drawLine(50, row, 470, row);//画横线
 arg0.drawLine(column, 50, column, 470);//画纵线
 }
-//每次重绘时根据二维数组中的状态值来绘制黑棋,白旗,空
+  //每次重绘时根据二维数组中的状态值来绘制黑棋,白旗,空
 for(int row=0;row<15;row++){
 for(int column=0;column<chess[row].length;column++){
 if(chess[row][column]==1){
